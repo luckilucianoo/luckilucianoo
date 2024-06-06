@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Statistics Calculator</h1>
+        <input type="text" id="numbers" placeholder="Enter numbers separated by commas">
+        <button onclick="calculateStats()">Calculate</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateStats() {
+            const input = document.getElementById('numbers').value;
+            const numbers = input.split(',').map(Number).filter(n => !isNaN(n));
+
+            if (numbers.length === 0) {
+                document.getElementById('result').innerHTML = 'Please enter valid numbers.';
+                return;
+            }
+
+            const mean = numbers.reduce((a, b) => a + b, 0) / numbers.length;
+
+            numbers.sort((a, b) => a - b);
+            const median = (numbers.length % 2 === 0) ? 
+                (numbers[numbers.length / 2 - 1] + numbers[numbers.length / 2]) / 2 : 
+                numbers[Math.floor(numbers.length / 2)];
+
+            const variance = numbers.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / numbers.length;
+            const stdDev = Math.sqrt(variance);
+
+            const q1 = numbers[Math.floor((numbers.length / 4))];
+            const q3 = numbers[Math.floor((numbers.length * (3 / 4)))];
+            const iqr = q3 - q1;
+
+            document.getElementById('result').innerHTML = `
+                <p><strong>Mean:</strong> ${mean.toFixed(2)}</p>
+                <p><strong>Median:</strong> ${median.toFixed(2)}</p>
+                <p><strong>Standard Deviation:</strong> ${stdDev.toFixed(2)}</p>
+                <p><strong>Interquartile Range (IQR):</strong> ${iqr.toFixed(2)}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
